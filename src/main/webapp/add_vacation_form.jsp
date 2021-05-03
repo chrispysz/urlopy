@@ -28,9 +28,9 @@
 
 <div class="jumbotron">
     <div class="container">
-        <h1>Wpisz dane nowego ośrodka</h1>
+        <h1>Edytuj dane</h1>
 
-        <form action="AdminServlet" method="get">
+        <form action="WorkerServlet" method="get">
             <input type="hidden" name="command" value="ADD">
             <div class="form-group">
                 <label for="Start">Od</label>

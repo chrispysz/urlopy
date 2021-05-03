@@ -37,59 +37,21 @@
 
 <div class="jumbotron">
     <div class="container">
-        <h1>Zmień dane telefonu</h1>
+        <h1>Zmień termin urlopu</h1>
 
-        <form action="AdminServlet" method="get">
+        <form action="WorkerServlet" method="get">
             <input type="hidden" name="command" value="UPDATE"/>
-            <input type="hidden" name="resortID" value="${RESORT.id}"/>
+            <input type="hidden" name="vacationIdInput" value="${VACATION.vacationId}"/>
+            <input type="hidden" name="userIdInput" value="${VACATION.userId}"/>
             <div class="form-group">
-                <label for="Name">Nazwa</label>
-                <input type="text" class="form-control" name="nameInput" value="${RESORT.name}"/>
+                <label for="Start">Od</label>
+                <input type="text" class="form-control" name="startDateInput" value="${VACATION.startDate}"/>
             </div>
             <div class="form-group">
-                <label for="State">Stan</label>
-                <input type="text" class="form-control" name="stateInput" value="${RESORT.state}"/>
+                <label for="End">Do</label>
+                <input type="text" class="form-control" name="endDateInput" value="${VACATION.endDate}"/>
             </div>
-            <div class="form-group">
-                <label for="Summit">Góra</label>
-                <input type="text" class="form-control" name="summitInput" value="${RESORT.summit}"/>
-            </div>
-            <div class="form-group">
-                <label for="Base">Dół</label>
-                <input type="text" class="form-control" name="baseInput" value="${RESORT.base}"/>
-            </div>
-            <div class="form-group">
-                <label for="Lifts">Wyciągi</label>
-                <input type="text" class="form-control" name="liftsInput" value="${RESORT.lifts}"/>
-            </div>
-            <div class="form-group">
-                <label for="Runs">Trasy</label>
-                <input type="text" class="form-control" name="runsInput" value="${RESORT.runs}"/>
-            </div>
-            <div class="form-group">
-                <label for="Acres">Pow. całkowita</label>
-                <input type="text" class="form-control" name="acresInput" value="${RESORT.acres}"/>
-            </div>
-            <div class="form-group">
-                <label for="GreenAcres">Pow. zielonych</label>
-                <input type="text" class="form-control" name="greenAcresInput" value="${RESORT.greenAcres}"/>
-            </div>
-            <div class="form-group">
-                <label for="BlueAcres">Pow. niebieskich</label>
-                <input type="text" class="form-control" name="blueAcresInput" value="${RESORT.blueAcres}"/>
-            </div>
-            <div class="form-group">
-                <label for="BlackAcres">Pow. czarnych</label>
-                <input type="text" class="form-control" name="blackAcresInput" value="${RESORT.blackAcres}"/>
-            </div>
-            <div class="form-group">
-                <label for="Lat">Szerokość geo.</label>
-                <input type="text" class="form-control" name="latInput" value="${RESORT.lat}"/>
-            </div>
-            <div class="form-group">
-                <label for="Lon">Długość geo.</label>
-                <input type="text" class="form-control" name="lonInput" value="${RESORT.lon}"/>
-            </div>
+            <input type="hidden" name="accepted" value="${VACATION.accepted}"/>
             <button type="submit" class="btn btn-success">Zmień dane</button>
         </form>
     </div>

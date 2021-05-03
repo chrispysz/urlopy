@@ -13,8 +13,8 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.util.List;
 
-@WebServlet("/AdminServlet")
-public class AdminServlet extends HttpServlet {
+@WebServlet("/ManagerServlet")
+public class ManagerServlet extends HttpServlet {
 
     private DBUtilAdmin dbUtil;
     private final String db_url = "jdbc:postgresql://localhost:5432/urlopy?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
@@ -185,10 +185,10 @@ public class AdminServlet extends HttpServlet {
 
     private void listVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        List<VacationDB> vacationsList = dbUtil.getVacations();
+        List<VacationDB> resortList = dbUtil.getVacations();
 
         // dodanie listy do obiektu zadania
-        request.setAttribute("VACATIONS_LIST", vacationsList);
+        request.setAttribute("RESORTS_LIST", resortList);
 
         // dodanie request dispatcher
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_view.jsp");

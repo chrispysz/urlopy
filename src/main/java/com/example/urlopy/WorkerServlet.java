@@ -13,10 +13,10 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.util.List;
 
-@WebServlet("/AdminServlet")
-public class AdminServlet extends HttpServlet {
+@WebServlet("/WorkerServlet")
+public class WorkerServlet extends HttpServlet {
 
-    private DBUtilAdmin dbUtil;
+    private DBUtilWorker dbUtil;
     private final String db_url = "jdbc:postgresql://localhost:5432/urlopy?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
 
 
@@ -26,7 +26,7 @@ public class AdminServlet extends HttpServlet {
 
         try {
 
-            dbUtil = new DBUtilAdmin(db_url);
+            dbUtil = new DBUtilWorker(db_url);
 
         } catch (Exception e) {
             throw new ServletException(e);
@@ -45,7 +45,7 @@ public class AdminServlet extends HttpServlet {
         dbUtil.setPassword(password);
 
         if (validate(name, password)) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_view.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/worker_view.jsp");
 
             List<VacationDB> vacationList = null;
 
@@ -119,10 +119,13 @@ public class AdminServlet extends HttpServlet {
         // odczytanie danych z formularza
         String id = request.getParameter("vacationId");
 
-        // usuniecie telefonu z BD
+        VacationDB vacation = dbUtil.getVacation(id);
+
+        // wstawienie urlopu do tabeli removed_vacations
+        dbUtil.insertVacation(vacation);
         dbUtil.deleteVacation(id);
 
-        // wyslanie danych do strony z lista telefonow
+        // wyslanie danych do strony z lista urlopów
         listVacations(request, response);
 
     }
@@ -130,17 +133,18 @@ public class AdminServlet extends HttpServlet {
     private void updateVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
-        int vacationId = Integer.parseInt(request.getParameter("vacationId"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
+        int vacationId = Integer.parseInt(request.getParameter("vacationIdInput"));
+        int userId = Integer.parseInt(request.getParameter("userIdInput"));
         Date startDate = Date.valueOf(request.getParameter("startDateInput"));
         Date endDate = Date.valueOf(request.getParameter("endDateInput"));
         boolean accepted = Boolean.parseBoolean(request.getParameter("acceptedInput"));
 
         // utworzenie nowego urlopu
-        VacationDB vacation=new VacationDB(vacationId, userId, startDate, endDate, accepted);
+        VacationDB vacation = new VacationDB(vacationId, userId, startDate, endDate, accepted);
 
         // uaktualnienie danych w BD
         dbUtil.updateVacation(vacation);
+        dbUtil.deleteVacation(String.valueOf(vacationId));
 
         // wyslanie danych do strony z lista urlopow
         listVacations(request, response);
@@ -167,13 +171,13 @@ public class AdminServlet extends HttpServlet {
     private void addVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
-        int userId = Integer.parseInt(request.getParameter("userId"));
+        int userId = dbUtil.getUserId();
         Date startDate = Date.valueOf(request.getParameter("startDateInput"));
         Date endDate = Date.valueOf(request.getParameter("endDateInput"));
-        boolean accepted = Boolean.parseBoolean(request.getParameter("acceptedInput"));
+        boolean accepted = false;
 
         // utworzenie obiektu klasy Vacation
-        VacationDB vacation=new VacationDB(userId, startDate, endDate, accepted);
+        VacationDB vacation = new VacationDB(userId, startDate, endDate, accepted);
 
         // dodanie nowego obiektu do BD
         dbUtil.addVacation(vacation);
@@ -191,7 +195,7 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("VACATIONS_LIST", vacationsList);
 
         // dodanie request dispatcher
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_view.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/worker_view.jsp");
 
         // przekazanie do JSP
         dispatcher.forward(request, response);
