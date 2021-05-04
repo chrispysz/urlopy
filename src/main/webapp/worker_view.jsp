@@ -48,25 +48,25 @@
   </thead>
   <tbody>
 
-  <c:forEach var="tmpVacation" items="${VACATIONS_LIST}">
+  <c:forEach var="tmpRemovedVacation" items="${VACATIONS_LIST}">
 
     <%-- definiowanie linkow--%>
     <c:url var="updateLink" value="WorkerServlet">
       <c:param name="command" value="LOAD"></c:param>
-      <c:param name="vacationId" value="${tmpVacation.vacationId}"></c:param>
+      <c:param name="vacationId" value="${tmpRemovedVacation.vacationId}"></c:param>
     </c:url>
 
     <c:url var="deleteLink" value="WorkerServlet">
       <c:param name="command" value="DELETE"></c:param>
-      <c:param name="vacationId" value="${tmpVacation.vacationId}"></c:param>
+      <c:param name="vacationId" value="${tmpRemovedVacation.vacationId}"></c:param>
     </c:url>
 
     <tr>
-      <th scope="row">${tmpVacation.vacationId}</th>
-      <td>${tmpVacation.userId}</td>
-      <td>${tmpVacation.startDate}</td>
-      <td>${tmpVacation.endDate}</td>
-      <td>${tmpVacation.accepted}</td>
+      <th scope="row">${tmpRemovedVacation.vacationId}</th>
+      <td>${tmpRemovedVacation.userId}</td>
+      <td>${tmpRemovedVacation.startDate}</td>
+      <td>${tmpRemovedVacation.endDate}</td>
+      <td>${tmpRemovedVacation.accepted}</td>
       <td><a href="${updateLink}">
         <button type="button" class="btn btn-success">Zmień dane</button>
       </a>

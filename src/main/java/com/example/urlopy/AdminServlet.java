@@ -47,18 +47,21 @@ public class AdminServlet extends HttpServlet {
         if (validate(name, password)) {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_view.jsp");
 
-            List<VacationDB> vacationList = null;
+            List<VacationDB> editedVacationList = null;
+            List<VacationDB> removedVacationList = null;
 
             try {
 
-                vacationList = dbUtil.getVacations();
+                editedVacationList = dbUtil.getEditedVacations();
+                removedVacationList = dbUtil.getRemovedVacations();
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             // dodanie listy do obiektu zadania
-            request.setAttribute("VACATIONS_LIST", vacationList);
+            request.setAttribute("EDITED_VACATIONS_LIST", editedVacationList);
+            request.setAttribute("REMOVED_VACATIONS_LIST", removedVacationList);
 
             dispatcher.forward(request, response);
         } else {
@@ -100,8 +103,12 @@ public class AdminServlet extends HttpServlet {
                     updateVacation(request, response);
                     break;
 
-                case "DELETE":
+                case "ACCEPTDELETE":
                     deleteVacation(request, response);
+                    break;
+
+                case "ACCEPTEDIT":
+                    acceptVacation(request, response);
                     break;
 
                 default:
@@ -114,15 +121,33 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    private void acceptVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        // odczytanie danych z formularza
+        String id = request.getParameter("vacationId");
+
+        VacationDB vacation = dbUtil.getEditedVacation(id);
+
+        // wstawienie urlopu do tabeli removed_vacations
+        dbUtil.insertVacation(vacation);
+        dbUtil.deleteEditedVacation(id);
+
+        // wyslanie danych do strony z lista urlopów
+        listVacations(request, response);
+
+    }
+
     private void deleteVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
         String id = request.getParameter("vacationId");
 
-        // usuniecie telefonu z BD
+        VacationDB vacation = dbUtil.getRemovedVacation(id);
+
+        // wstawienie urlopu do tabeli removed_vacations
         dbUtil.deleteVacation(id);
 
-        // wyslanie danych do strony z lista telefonow
+        // wyslanie danych do strony z lista urlopów
         listVacations(request, response);
 
     }
@@ -185,10 +210,12 @@ public class AdminServlet extends HttpServlet {
 
     private void listVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        List<VacationDB> vacationsList = dbUtil.getVacations();
+        List<VacationDB> vacationsEditedList = dbUtil.getEditedVacations();
+        List<VacationDB> vacationsRemovedList = dbUtil.getRemovedVacations();
 
         // dodanie listy do obiektu zadania
-        request.setAttribute("VACATIONS_LIST", vacationsList);
+        request.setAttribute("EDITED_VACATIONS_LIST", vacationsEditedList);
+        request.setAttribute("REMOVED_VACATIONS_LIST", vacationsRemovedList);
 
         // dodanie request dispatcher
         RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_view.jsp");

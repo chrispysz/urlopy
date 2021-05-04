@@ -35,51 +35,95 @@
 <div class="row form-group"></div>
 <div class="row form-group"></div>
 
-<table class="table default">
-
-  <thead>
-  <tr>
-    <th scope="col">ID</th>
-    <th scope="col">ID pracownika</th>
-    <th scope="col">Od</th>
-    <th scope="col">Do</th>
-    <th scope="col">Zaakceptowano</th>
-  </tr>
-  </thead>
-  <tbody>
-
-  <c:forEach var="tmpVacation" items="${VACATIONS_LIST}">
-
-    <%-- definiowanie linkow--%>
-    <c:url var="updateLink" value="AdminServlet">
-      <c:param name="command" value="LOAD"></c:param>
-      <c:param name="vacationId" value="${tmpVacation.vacationId}"></c:param>
-    </c:url>
-
-    <c:url var="deleteLink" value="AdminServlet">
-      <c:param name="command" value="DELETE"></c:param>
-      <c:param name="vacationId" value="${tmpVacation.vacationId}"></c:param>
-    </c:url>
-
-    <tr>
-      <th scope="row">${tmpVacation.vacationId}</th>
-      <td>${tmpVacation.userId}</td>
-      <td>${tmpVacation.startDate}</td>
-      <td>${tmpVacation.endDate}</td>
-      <td>${tmpVacation.accepted}</td>
-      <td><a href="${updateLink}">
-        <button type="button" class="btn btn-success">Zmień dane</button>
-      </a>
-        <a href="${deleteLink}"
-           onclick="if(!(confirm('Czy na pewno chcesz usunąć ten urlop?'))) return false">
-          <button type="button" class="btn btn-danger">Usuń</button>
-        </a></td>
-    </tr>
 
 
-  </c:forEach>
-  </tbody>
-</table>
+
+
+  <div class="modal-body row">
+    <div class="col-md-6">
+
+
+      <table class="table default">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">ID pracownika</th>
+        <th scope="col">Od</th>
+        <th scope="col">Do</th>
+        <th scope="col">Zaakceptowano</th>
+      </tr>
+      </thead>
+      <tbody>
+
+        <c:forEach var="tmpVacation" items="${EDITED_VACATIONS_LIST}">
+
+          <%-- definiowanie linkow--%>
+          <c:url var="updateLink" value="AdminServlet">
+            <c:param name="command" value="ACCEPTEDIT"></c:param>
+            <c:param name="vacationId" value="${tmpVacation.vacationId}"></c:param>
+          </c:url>
+
+
+
+          <tr>
+            <th scope="row">${tmpVacation.vacationId}</th>
+            <td>${tmpVacation.userId}</td>
+            <td>${tmpVacation.startDate}</td>
+            <td>${tmpVacation.endDate}</td>
+            <td>${tmpVacation.accepted}</td>
+            <td><a href="${updateLink}">
+              <button type="button" class="btn btn-success">OK</button>
+            </a>
+              </td>
+          </tr>
+
+
+        </c:forEach>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <table class="table default">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">ID pracownika</th>
+        <th scope="col">Od</th>
+        <th scope="col">Do</th>
+        <th scope="col">Zaakceptowano</th>
+      </tr>
+      </thead>
+      <tbody>
+
+        <c:forEach var="tmpRemovedVacation" items="${REMOVED_VACATIONS_LIST}">
+
+          <%-- definiowanie linkow--%>
+          <c:url var="deleteLink" value="AdminServlet">
+            <c:param name="command" value="ACCEPTDELETE"></c:param>
+            <c:param name="vacationId" value="${tmpRemovedVacation.vacationId}"></c:param>
+          </c:url>
+
+          <tr>
+            <th scope="row">${tmpRemovedVacation.vacationId}</th>
+            <td>${tmpRemovedVacation.userId}</td>
+            <td>${tmpRemovedVacation.startDate}</td>
+            <td>${tmpRemovedVacation.endDate}</td>
+            <td>${tmpRemovedVacation.accepted}</td>
+            <td><a href="${deleteLink}">
+              <button type="button" class="btn btn-success">OK</button>
+            </a>
+            </td>
+          </tr>
+
+
+        </c:forEach>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
 
 <div class="row form-group"></div>
 <div class="row form-group"></div>
@@ -91,9 +135,7 @@
     <div class="col-sm-9">
       <a href="index.html" class="btn btn-lg btn-primary" role="button" aria-disabled="true">Wróć do strony głównej</a>
     </div>
-    <div class="col-sm-9">
-      <p><a class="btn btn-primary btn-info" href="add_vacation_form.jsp" role="button">Dodaj urlop</a></p>
-    </div>
+
   </div>
 </div>
 
