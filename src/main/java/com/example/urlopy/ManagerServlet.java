@@ -9,14 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.util.List;
 
 @WebServlet("/ManagerServlet")
 public class ManagerServlet extends HttpServlet {
 
-    private DBUtilAdmin dbUtil;
+    private DBUtilManager dbUtil;
     private final String db_url = "jdbc:postgresql://localhost:5432/urlopy?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
 
 
@@ -26,7 +25,7 @@ public class ManagerServlet extends HttpServlet {
 
         try {
 
-            dbUtil = new DBUtilAdmin(db_url);
+            dbUtil = new DBUtilManager(db_url);
 
         } catch (Exception e) {
             throw new ServletException(e);
@@ -45,7 +44,7 @@ public class ManagerServlet extends HttpServlet {
         dbUtil.setPassword(password);
 
         if (validate(name, password)) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_view.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/manager_view.jsp");
 
             List<VacationDB> vacationList = null;
 
@@ -88,20 +87,12 @@ public class ManagerServlet extends HttpServlet {
                     listVacations(request, response);
                     break;
 
-                case "ADD":
-                    addVacations(request, response);
-                    break;
-
                 case "LOAD":
-                    loadVacations(request, response);
+                    loadVacation(request, response);
                     break;
 
-                case "UPDATE":
-                    updateVacation(request, response);
-                    break;
-
-                case "DELETE":
-                    deleteVacation(request, response);
+                case "ACCEPT":
+                    acceptVacation(request, response);
                     break;
 
                 default:
@@ -114,40 +105,20 @@ public class ManagerServlet extends HttpServlet {
 
     }
 
-    private void deleteVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        // odczytanie danych z formularza
+    private void acceptVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         String id = request.getParameter("vacationId");
 
-        // usuniecie telefonu z BD
-        dbUtil.deleteVacation(id);
-
-        // wyslanie danych do strony z lista telefonow
-        listVacations(request, response);
-
-    }
-
-    private void updateVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        // odczytanie danych z formularza
-        int vacationId = Integer.parseInt(request.getParameter("vacationId"));
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        Date startDate = Date.valueOf(request.getParameter("startDateInput"));
-        Date endDate = Date.valueOf(request.getParameter("endDateInput"));
-        boolean accepted = Boolean.parseBoolean(request.getParameter("acceptedInput"));
-
-        // utworzenie nowego urlopu
-        VacationDB vacation=new VacationDB(vacationId, userId, startDate, endDate, accepted);
-
         // uaktualnienie danych w BD
-        dbUtil.updateVacation(vacation);
+        dbUtil.acceptVacation(id);
 
         // wyslanie danych do strony z lista urlopow
         listVacations(request, response);
 
     }
 
-    private void loadVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    private void loadVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie id urlopu z formularza
         String id = request.getParameter("vacationId");
@@ -164,34 +135,16 @@ public class ManagerServlet extends HttpServlet {
 
     }
 
-    private void addVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
-        // odczytanie danych z formularza
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        Date startDate = Date.valueOf(request.getParameter("startDateInput"));
-        Date endDate = Date.valueOf(request.getParameter("endDateInput"));
-        boolean accepted = Boolean.parseBoolean(request.getParameter("acceptedInput"));
-
-        // utworzenie obiektu klasy Vacation
-        VacationDB vacation=new VacationDB(userId, startDate, endDate, accepted);
-
-        // dodanie nowego obiektu do BD
-        dbUtil.addVacation(vacation);
-
-        // powrot do listy
-        listVacations(request, response);
-
-    }
 
     private void listVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        List<VacationDB> resortList = dbUtil.getVacations();
+        List<VacationDB> vacationsList = dbUtil.getVacations();
 
         // dodanie listy do obiektu zadania
-        request.setAttribute("RESORTS_LIST", resortList);
+        request.setAttribute("VACATIONS_LIST", vacationsList);
 
         // dodanie request dispatcher
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin_view.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/manager_view.jsp");
 
         // przekazanie do JSP
         dispatcher.forward(request, response);

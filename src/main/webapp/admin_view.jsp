@@ -72,7 +72,7 @@
             <td>${tmpVacation.endDate}</td>
             <td>${tmpVacation.accepted}</td>
             <td><a href="${updateLink}">
-              <button type="button" class="btn btn-success">OK</button>
+              <button type="button" class="btn btn-success">Potwierdź edycję</button>
             </a>
               </td>
           </tr>
@@ -98,7 +98,7 @@
         <c:forEach var="tmpRemovedVacation" items="${REMOVED_VACATIONS_LIST}">
 
           <%-- definiowanie linkow--%>
-          <c:url var="deleteLink" value="AdminServlet">
+          <c:url var="acceptLink" value="AdminServlet">
             <c:param name="command" value="ACCEPTDELETE"></c:param>
             <c:param name="vacationId" value="${tmpRemovedVacation.vacationId}"></c:param>
           </c:url>
@@ -109,8 +109,8 @@
             <td>${tmpRemovedVacation.startDate}</td>
             <td>${tmpRemovedVacation.endDate}</td>
             <td>${tmpRemovedVacation.accepted}</td>
-            <td><a href="${deleteLink}">
-              <button type="button" class="btn btn-success">OK</button>
+            <td><a href="${acceptLink}">
+              <button type="button" class="btn btn-success">Potwierdź usunięcie</button>
             </a>
             </td>
           </tr>

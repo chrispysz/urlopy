@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DBUtilManager extends DBUtil {
+public class DBUtilRegister extends DBUtil {
 
     private String URL;
     private String name;
     private String password;
 
-    public DBUtilManager(String URL) {
+    public DBUtilRegister(String URL) {
         this.URL = URL;
     }
 
@@ -43,7 +43,7 @@ public class DBUtilManager extends DBUtil {
                 int userId = resultSet.getInt("user_id");
                 Date startDate = resultSet.getDate("start_date");
                 Date endDate = resultSet.getDate("end_date");
-                boolean accepted=resultSet.getBoolean("accepted");
+                boolean accepted = resultSet.getBoolean("accepted");
 
                 // dodanie do listy nowego obiektu
                 vacations.add(new VacationDB(vacationId, userId, startDate, endDate, accepted));
@@ -62,83 +62,47 @@ public class DBUtilManager extends DBUtil {
 
     }
 
-
-    public VacationDB getVacation(String id) throws Exception {
-
-        VacationDB vacation = null;
+    public void registerUser(String uname, String pass, String barePass, String emai) throws Exception {
 
         Connection conn = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        Statement statement = null;
 
         try {
 
-            // konwersja id na liczbe
-            int vacationId = Integer.parseInt(id);
-
-            // polaczenie z BD
             conn = DriverManager.getConnection(URL, name, password);
 
-            // zapytanie SELECT
-            String sql = "SELECT * FROM vacations WHERE vacation_id =?";
+            statement = conn.createStatement();
+            statement.executeUpdate("CREATE USER " + uname + " WITH PASSWORD " + pass);
 
-            statement = conn.prepareStatement(sql);
-            statement.setInt(1, vacationId);
+            statement = conn.createStatement();
+            statement.executeUpdate("GRANT USAGE, SELECT ON SEQUENCE vacations_vacation_id_seq TO "+uname);
 
-            // wykonanie zapytania
-            resultSet = statement.executeQuery();
+            statement = conn.createStatement();
+            statement.executeUpdate("GRANT SELECT ON vacations TO "+uname);
 
-            // przetworzenie wyniku zapytania
+            statement = conn.createStatement();
+            statement.executeUpdate("GRANT SELECT ON accounts TO "+uname);
 
-            if (resultSet.next()) {
+            statement = conn.createStatement();
+            statement.executeUpdate("GRANT INSERT ON vacations TO "+uname);
 
-                //int id = resultSet.getInt("id");
-                int userId = resultSet.getInt("user_id");
-                Date startDate = resultSet.getDate("start_date");
-                Date endDate = resultSet.getDate("end_date");
-                boolean accepted=resultSet.getBoolean("accepted");
+            statement = conn.createStatement();
+            statement.executeUpdate("GRANT INSERT ON edited_vacations TO "+uname);
 
-                // dodanie do listy nowego obiektu
-                vacation=new VacationDB(vacationId, userId, startDate, endDate, accepted);
+            statement = conn.createStatement();
+            statement.executeUpdate("GRANT INSERT ON removed_vacations TO "+uname);
 
-            } else {
-                throw new Exception("Could not find vacation with id " + vacationId);
-            }
+            statement = conn.createStatement();
+            statement.executeUpdate("GRANT DELETE ON vacations TO "+uname);
 
-            return vacation;
+            statement = conn.createStatement();
+            statement.executeUpdate("INSERT INTO accounts(username, password, email) " +
+                    "VALUES ('"+uname+"','"+barePass+"','"+emai+"')");
 
-        } finally {
+            statement = conn.createStatement();
+            statement.executeUpdate("INSERT INTO accounts_roles(user_id, role_id) " +
+                    "VALUES ("+getUserId(uname)+",3)");
 
-            // zamkniecie obiektow JDBC
-            close(conn, statement, resultSet);
-
-        }
-
-    }
-
-
-    public void acceptVacation(String id) throws Exception {
-
-        Connection conn = null;
-        PreparedStatement statement = null;
-
-        try {
-
-            // konwersja id na liczbe
-            int vacationId = Integer.parseInt(id);
-
-            // polaczenie z BD
-            conn = DriverManager.getConnection(URL, name, password);
-
-            // zapytanie DELETE
-            String sql = "UPDATE vacations SET accepted=true " +
-                    "WHERE vacation_id =?";
-
-            statement = conn.prepareStatement(sql);
-            statement.setInt(1, vacationId);
-
-            // wykonanie zapytania
-            statement.execute();
 
         } finally {
 
@@ -148,6 +112,43 @@ public class DBUtilManager extends DBUtil {
         }
 
     }
+
+    public int getUserId(String uname) throws Exception {
+
+        int id=0;
+
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(URL, name, password);
+
+            // zapytanie UPDATE
+            String sql = "SELECT user_id from accounts " +
+                    "WHERE username =?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setString(1, uname);
+
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                id= resultSet.getInt("user_id");
+            }
+
+        } finally {
+
+            // zamkniecie obiektow JDBC
+            close(conn, statement, null);
+
+        }
+
+        return id;
+    }
+
 
     public void setName(String name) {
         this.name = name;
