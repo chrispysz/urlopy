@@ -143,8 +143,9 @@ public class WorkerServlet extends HttpServlet {
         VacationDB vacation = new VacationDB(vacationId, userId, startDate, endDate, accepted);
 
         // uaktualnienie danych w BD
-        dbUtil.updateVacation(vacation);
+
         dbUtil.deleteVacation(String.valueOf(vacationId));
+        dbUtil.updateVacation(vacation);
 
         // wyslanie danych do strony z lista urlopow
         listVacations(request, response);
