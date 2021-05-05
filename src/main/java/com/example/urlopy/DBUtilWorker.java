@@ -1,6 +1,8 @@
 package com.example.urlopy;
 
 import java.sql.*;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +16,15 @@ public class DBUtilWorker extends DBUtil {
 
     public DBUtilWorker(String URL) {
         this.URL = URL;
+    }
+
+    long getDuration(VacationDB vacation) throws Exception {
+
+        LocalDate date1= vacation.getStartDate().toLocalDate();
+        LocalDate date2= vacation.getEndDate().toLocalDate();
+
+        return  Duration.between(date1.atStartOfDay(), date2.atStartOfDay()).toDays();
+
     }
 
     public List<VacationDB> getVacations() throws Exception {
@@ -68,6 +79,11 @@ public class DBUtilWorker extends DBUtil {
 
     public void addVacation(VacationDB vacation) throws Exception {
 
+        long daysBetween = getDuration(vacation);
+        int remaining = getRemainingDaysOff();
+
+        if(daysBetween>remaining) throw new Exception("Przekroczono liczbę wolnych dni, dostępne dni wolne: " + remaining + ", czas trwania urlopu: "+daysBetween);
+
         Connection conn = null;
         PreparedStatement statement = null;
 
@@ -93,6 +109,57 @@ public class DBUtilWorker extends DBUtil {
         } finally {
 
             close(conn, statement, null);
+
+        }
+
+        updateRemainingDays(this.id, (int) (getRemainingDaysOff()-daysBetween));
+
+    }
+
+    public int getRemainingDaysOff() throws Exception {
+
+
+
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            // konwersja id na liczbe
+            int workerId = this.id;
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(URL, name, password);
+
+            // zapytanie SELECT
+            String sql = "SELECT * FROM accounts WHERE user_id =?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, workerId);
+
+            // wykonanie zapytania
+            resultSet = statement.executeQuery();
+
+            // przetworzenie wyniku zapytania
+
+            if (resultSet.next()) {
+
+                //int id = resultSet.getInt("id");
+                int remainingDaysOff = resultSet.getInt("remaining_days_off");
+
+                return remainingDaysOff;
+
+            } else {
+                throw new Exception("Could not find user with id " + workerId);
+            }
+
+
+
+        } finally {
+
+            // zamkniecie obiektow JDBC
+            close(conn, statement, resultSet);
 
         }
 
@@ -153,6 +220,11 @@ public class DBUtilWorker extends DBUtil {
 
     public void updateVacation(VacationDB vacation) throws Exception {
 
+        long daysBetween = getDuration(vacation);
+        int remaining = getRemainingDaysOff();
+
+        if(daysBetween>remaining) throw new Exception("Przekroczono liczbę wolnych dni, dostępne dni wolne: " + remaining + ", czas trwania urlopu: "+daysBetween);
+
         Connection conn = null;
         PreparedStatement statement = null;
 
@@ -183,10 +255,12 @@ public class DBUtilWorker extends DBUtil {
             close(conn, statement, null);
 
         }
-
+        updateRemainingDays(this.id, (int) (getRemainingDaysOff()-daysBetween));
     }
 
     public void insertVacation(VacationDB vacation) throws Exception {
+
+
 
         Connection conn = null;
         PreparedStatement statement = null;
@@ -223,6 +297,8 @@ public class DBUtilWorker extends DBUtil {
 
     public void deleteVacation(String id) throws Exception {
 
+        long duration=getDuration(getVacation(id));
+
         Connection conn = null;
         PreparedStatement statement = null;
 
@@ -249,7 +325,7 @@ public class DBUtilWorker extends DBUtil {
             close(conn, statement, null);
 
         }
-
+        updateRemainingDays(this.id, (int) (getRemainingDaysOff()+duration));
     }
 
     public int getUserId() throws Exception {
@@ -285,6 +361,39 @@ public class DBUtilWorker extends DBUtil {
 
         return id;
     }
+
+    public void updateRemainingDays(int workerID, int newDays) throws Exception {
+
+        Connection conn = null;
+        PreparedStatement statement = null;
+
+        try {
+
+            // polaczenie z BD
+            conn = DriverManager.getConnection(URL, name, password);
+
+            // zapytanie DELETE
+            String sql = "UPDATE accounts SET remaining_days_off=? " +
+                    "WHERE user_id =?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1, newDays);
+            statement.setInt(2, workerID);
+
+            // wykonanie zapytania
+            statement.execute();
+
+        } finally {
+
+            // zamkniecie obiektow JDBC
+            close(conn, statement, null);
+
+        }
+
+    }
+
+
+
 
     public void setName(String name) {
         this.name = name;
