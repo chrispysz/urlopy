@@ -79,6 +79,7 @@ GRANT INSERT ON vacations TO test_worker;
 GRANT INSERT ON edited_vacations TO test_worker;
 GRANT INSERT ON removed_vacations TO test_worker;
 GRANT DELETE ON vacations TO test_worker;
+GRANT UPDATE ON accounts TO test_worker;
 
 INSERT INTO accounts_roles (user_id, role_id)
 VALUES (1,3);

@@ -96,6 +96,9 @@ public class DBUtilRegister extends DBUtil {
             statement.executeUpdate("GRANT DELETE ON vacations TO "+uname);
 
             statement = conn.createStatement();
+            statement.executeUpdate("GRANT UPDATE ON accounts TO "+uname);
+
+            statement = conn.createStatement();
             statement.executeUpdate("INSERT INTO accounts(username, password, email) " +
                     "VALUES ('"+uname+"','"+barePass+"','"+emai+"')");
 

@@ -15,7 +15,7 @@
         <div class="navbar-header">
 
             <div class="style padding: 25 px">
-                <a class="navbar-brand" href="index.html">Resorts</a>
+                <a class="navbar-brand" href="index.html">UrloPol</a>
             </div>
 
         </div>
