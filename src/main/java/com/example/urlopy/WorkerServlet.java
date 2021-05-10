@@ -109,7 +109,12 @@ public class WorkerServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            throw new ServletException(e);
+            request.setAttribute("error", "Proszę podać poprawne daty!");
+            try {
+                listVacations(request, response);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
 
     }
@@ -149,6 +154,7 @@ public class WorkerServlet extends HttpServlet {
 
         // wyslanie danych do strony z lista urlopow
         listVacations(request, response);
+
 
     }
 

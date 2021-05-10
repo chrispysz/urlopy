@@ -41,7 +41,8 @@ public class RegisterServlet extends HttpServlet {
         response.setContentType("text/html");
 
         if (validate("test_admin", "pass")) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.html");
+
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
 
 
             try {
@@ -53,8 +54,10 @@ public class RegisterServlet extends HttpServlet {
 
                 dbUtil.registerUser(uname, properPass,pass, email);
 
+                request.setAttribute("success", "Poprawnie utworzono użytkownika!");
+
             } catch (Exception e) {
-                e.printStackTrace();
+                request.setAttribute("error", "Rejestracja nie powiodła się!");
             }
 
             dispatcher.forward(request, response);
