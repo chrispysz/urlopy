@@ -6,7 +6,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+/**
+ * Klasa odpowiedzialna za obsługę bazy danych w zakresie działań pracownika
+ */
 public class DBUtilWorker extends DBUtil {
 
     private String URL;
@@ -18,6 +20,12 @@ public class DBUtilWorker extends DBUtil {
         this.URL = URL;
     }
 
+    /**
+     * zwraca czas trwania podanego urlopu
+     * @param vacation urlop
+     * @return czas trwania
+     * @throws Exception
+     */
     long getDuration(VacationDB vacation) throws Exception {
 
         LocalDate date1= vacation.getStartDate().toLocalDate();
@@ -27,6 +35,11 @@ public class DBUtilWorker extends DBUtil {
 
     }
 
+    /**
+     * zwraca urlopy przypisane do danego użytkownika
+     * @return
+     * @throws Exception
+     */
     public List<VacationDB> getVacations() throws Exception {
 
         int x=getUserId();
@@ -77,6 +90,11 @@ public class DBUtilWorker extends DBUtil {
 
     }
 
+    /**
+     * dodaje urlop do tabeli vacations
+     * @param vacation
+     * @throws Exception
+     */
     public void addVacation(VacationDB vacation) throws Exception {
 
         long daysBetween = getDuration(vacation);
@@ -116,6 +134,11 @@ public class DBUtilWorker extends DBUtil {
 
     }
 
+    /**
+     * pobiera informację o dostępnych wolnych dniach dla uzytkownika
+     * @return int, pozostałe wolne dni
+     * @throws Exception
+     */
     public int getRemainingDaysOff() throws Exception {
 
 
@@ -165,6 +188,12 @@ public class DBUtilWorker extends DBUtil {
 
     }
 
+    /**
+     * zwraca urlop o podanym id
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public VacationDB getVacation(String id) throws Exception {
 
         VacationDB vacation = null;
@@ -218,6 +247,11 @@ public class DBUtilWorker extends DBUtil {
 
     }
 
+    /**
+     * aktualizuje wybrany urlop
+     * @param vacation
+     * @throws Exception
+     */
     public void updateVacation(VacationDB vacation) throws Exception {
 
         long daysBetween = getDuration(vacation);
@@ -258,6 +292,11 @@ public class DBUtilWorker extends DBUtil {
         updateRemainingDays(this.id, (int) (getRemainingDaysOff()-daysBetween));
     }
 
+    /**
+     * dodaje urlop do tabeli usuniętych wakacji
+     * @param vacation
+     * @throws Exception
+     */
     public void insertVacation(VacationDB vacation) throws Exception {
 
 
@@ -295,6 +334,11 @@ public class DBUtilWorker extends DBUtil {
 
     }
 
+    /**
+     * usuwa urlop z tabeli wakacji
+     * @param id
+     * @throws Exception
+     */
     public void deleteVacation(String id) throws Exception {
 
         long duration=getDuration(getVacation(id));
@@ -328,6 +372,11 @@ public class DBUtilWorker extends DBUtil {
         updateRemainingDays(this.id, (int) (getRemainingDaysOff()+duration));
     }
 
+    /**
+     * zwraca ID usera
+     * @return
+     * @throws Exception
+     */
     public int getUserId() throws Exception {
 
         Connection conn = null;
@@ -362,6 +411,12 @@ public class DBUtilWorker extends DBUtil {
         return id;
     }
 
+    /**
+     * aktualizuje pozostałą liczbę wolnych dni
+     * @param workerID
+     * @param newDays
+     * @throws Exception
+     */
     public void updateRemainingDays(int workerID, int newDays) throws Exception {
 
         Connection conn = null;

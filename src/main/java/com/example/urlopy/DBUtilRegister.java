@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Klasa odpowiedzialna za obsługę bazy danych w zakresie rejestracji
+ */
 public class DBUtilRegister extends DBUtil {
 
     private String URL;
@@ -15,6 +18,11 @@ public class DBUtilRegister extends DBUtil {
         this.URL = URL;
     }
 
+    /**
+     * zwraca listę niezaakceptowanych urlopów
+     * @return lista niezakceptowanych urlopów
+     * @throws Exception
+     */
     public List<VacationDB> getVacations() throws Exception {
 
         List<VacationDB> vacations = new ArrayList<>();
@@ -62,6 +70,14 @@ public class DBUtilRegister extends DBUtil {
 
     }
 
+    /**
+     * tworzy nowego usera (pracownika), na podstawie przesłanych danych, dodaje go do listy użytkowników, oraz nadaje mu potrzebne przywileje
+     * @param uname
+     * @param pass
+     * @param barePass
+     * @param emai
+     * @throws Exception
+     */
     public void registerUser(String uname, String pass, String barePass, String emai) throws Exception {
 
         Connection conn = null;
@@ -116,6 +132,12 @@ public class DBUtilRegister extends DBUtil {
 
     }
 
+    /**
+     * zwraca id użytkownika o podanym loginie
+     * @param uname
+     * @return
+     * @throws Exception
+     */
     public int getUserId(String uname) throws Exception {
 
         int id=0;

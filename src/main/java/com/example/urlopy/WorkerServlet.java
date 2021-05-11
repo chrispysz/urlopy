@@ -12,7 +12,9 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.util.List;
-
+/**
+ * Klasa WorkerServlet odpowiada za połączenie widoków pracownika z pozostałymi klasami obsługująćymi bazę danych
+ */
 @WebServlet("/WorkerServlet")
 public class WorkerServlet extends HttpServlet {
 
@@ -32,7 +34,13 @@ public class WorkerServlet extends HttpServlet {
             throw new ServletException(e);
         }
     }
-
+    /**
+     * Funkcja odpowiadająca za obsługę zapytań Post
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -69,7 +77,13 @@ public class WorkerServlet extends HttpServlet {
 
 
     }
-
+    /**
+     * funkcja odpowiadająca za obsługę zapytań Get
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -118,7 +132,12 @@ public class WorkerServlet extends HttpServlet {
         }
 
     }
-
+    /**
+     * funkcja odpowiadająca za tworzenie próśb o usunięcie urlopu
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void deleteVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
@@ -134,7 +153,12 @@ public class WorkerServlet extends HttpServlet {
         listVacations(request, response);
 
     }
-
+    /**
+     * funkcja odpowiadająca za aktualizowanie urlopu
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void updateVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
@@ -157,7 +181,12 @@ public class WorkerServlet extends HttpServlet {
 
 
     }
-
+    /**
+     * funkcja obsługująca pobranie urlopu o podanym ID
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void loadVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie id urlopu z formularza
@@ -174,7 +203,12 @@ public class WorkerServlet extends HttpServlet {
         dispatcher.forward(request, response);
 
     }
-
+    /**
+     * funkcja odpowiadająca za dodawanie urlopów do BD
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void addVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
@@ -193,7 +227,12 @@ public class WorkerServlet extends HttpServlet {
         listVacations(request, response);
 
     }
-
+    /**
+     * funkcja odpowiadająca za wypisanie listy urlopów
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void listVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         List<VacationDB> vacationsList = dbUtil.getVacations();
@@ -209,7 +248,12 @@ public class WorkerServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * funkcja odpowiadająca za potwierdzenie poprawności hasła
+     * @param name login
+     * @param pass hasło
+     * @return czy potwierdzenie przzebiegło pomyślnie
+     */
     private boolean validate(String name, String pass) {
         boolean status = false;
 

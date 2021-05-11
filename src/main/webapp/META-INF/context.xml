@@ -3,7 +3,7 @@
     <Resource name="jdbc/urlopy_app"
               auth="Container" type="javax.sql.DataSource"
               maxActive="20" maxIdle="5" maxWait="10000"
-              username="postgres" password="509363509363"
+              username="postgres" password="1999MNmn"
               driverClassName="org.postgresql.Driver"
               url="jdbc:postgresql://localhost:5432/urlopy?serverTimezone=CET" />
 

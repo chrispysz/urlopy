@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Klasa odpowiedzialna za obsługę bazy danych w zakresie działań admina
+ */
 public class DBUtilAdmin extends DBUtil {
 
     private String URL;
@@ -21,6 +24,11 @@ public class DBUtilAdmin extends DBUtil {
         return null;
     }
 
+    /**
+     * zwraca liste z tabeli edited_vacations
+     * @return liste z tabeli edited_vacations
+     * @throws Exception
+     */
     public List<VacationDB> getEditedVacations() throws Exception {
 
         List<VacationDB> vacations = new ArrayList<>();
@@ -68,6 +76,11 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
+    /**
+     * zwraca liste z tabeli removed_vacations
+     * @return lista z tabeli removed_vacations
+     * @throws Exception
+     */
     public List<VacationDB> getRemovedVacations() throws Exception {
 
         List<VacationDB> vacations = new ArrayList<>();
@@ -115,6 +128,11 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
+    /**
+     * funkcja odpowiedzialna za wstawienie urlopu do tabeli vacations
+     * @param vacation
+     * @throws Exception
+     */
     public void addVacation(VacationDB vacation) throws Exception {
 
         Connection conn = null;
@@ -148,6 +166,12 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
+    /**
+     * zwraca urlop z podanym ID
+     * @param id
+     * @return urlop z podanym ID
+     * @throws Exception
+     */
     public VacationDB getVacation(String id) throws Exception {
 
         VacationDB vacation = null;
@@ -201,6 +225,12 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
+    /**
+     * zwraca urlop z podanym ID z tabeli edited_vacations
+     * @param id
+     * @return urlop z podanym ID z tabeli edited_vacations
+     * @throws Exception
+     */
     public VacationDB getEditedVacation(String id) throws Exception {
 
         VacationDB vacation = null;
@@ -253,7 +283,12 @@ public class DBUtilAdmin extends DBUtil {
         }
 
     }
-
+    /**
+     * zwraca urlop z podanym ID z tabeli removed_vacations
+     * @param id
+     * @return urlop z podanym ID z tabeli removed_vacations
+     * @throws Exception
+     */
     public VacationDB getRemovedVacation(String id) throws Exception {
 
         VacationDB vacation = null;
@@ -307,6 +342,11 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
+    /**
+     * aktualizuję urlop w tabeli vacations
+     * @param vacation dane urlopu do edycji
+     * @throws Exception
+     */
     public void updateVacation(VacationDB vacation) throws Exception {
 
         Connection conn = null;
@@ -339,6 +379,11 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
+    /**
+     * usuwa urlop z tabeli removed_vacations
+     * @param id id urlopu do usunięcia
+     * @throws Exception
+     */
     public void deleteVacation(String id) throws Exception {
 
         Connection conn = null;
@@ -369,7 +414,11 @@ public class DBUtilAdmin extends DBUtil {
         }
 
     }
-
+    /**
+     * usuwa urlop z tabeli edited_vacations
+     * @param id id urlopu do usunięcia
+     * @throws Exception
+     */
     public void deleteEditedVacation(String id) throws Exception {
 
         Connection conn = null;
@@ -401,6 +450,11 @@ public class DBUtilAdmin extends DBUtil {
 
     }
 
+    /**
+     * dodaje urlop do tabeli vacations
+     * @param vacation parametry urlopu do dodania
+     * @throws Exception
+     */
     public void insertVacation(VacationDB vacation) throws Exception {
 
         Connection conn = null;

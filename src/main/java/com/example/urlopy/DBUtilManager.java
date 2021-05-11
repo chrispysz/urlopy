@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Klasa odpowiedzialna za obsługę bazy danych w zakresie działań kierownika
+ */
 public class DBUtilManager extends DBUtil {
 
     private String URL;
@@ -15,6 +18,11 @@ public class DBUtilManager extends DBUtil {
         this.URL = URL;
     }
 
+    /**
+     * zwraca listę niezaakceptowanych urlopów
+     * @return lista niezakceptowanych urlopów
+     * @throws Exception
+     */
     public List<VacationDB> getVacations() throws Exception {
 
         List<VacationDB> vacations = new ArrayList<>();
@@ -62,7 +70,12 @@ public class DBUtilManager extends DBUtil {
 
     }
 
-
+    /**
+     * zwraca urlop o podanym id
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public VacationDB getVacation(String id) throws Exception {
 
         VacationDB vacation = null;
@@ -116,7 +129,11 @@ public class DBUtilManager extends DBUtil {
 
     }
 
-
+    /**
+     * akceptuje urlop o podanym id, zmienając parametr accepted
+     * @param id
+     * @throws Exception
+     */
     public void acceptVacation(String id) throws Exception {
 
         Connection conn = null;

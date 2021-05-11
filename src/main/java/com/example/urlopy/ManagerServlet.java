@@ -12,6 +12,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.List;
 
+/**
+ * Klasa ManagerServlet odpowiada za połączenie widoków kierownika z pozostałymi klasami obsługująćymi bazę danych
+ */
 @WebServlet("/ManagerServlet")
 public class ManagerServlet extends HttpServlet {
 
@@ -32,6 +35,13 @@ public class ManagerServlet extends HttpServlet {
         }
     }
 
+    /**
+     * funkcja odpowiedzialna za obsługę zapytań Post
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -68,7 +78,13 @@ public class ManagerServlet extends HttpServlet {
 
 
     }
-
+    /**
+     * funkcja odpowiadająca za obsługę zapytań Get
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -105,7 +121,12 @@ public class ManagerServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * funkcja obsługująca akceptację urlopu
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void acceptVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String id = request.getParameter("vacationId");
@@ -118,6 +139,12 @@ public class ManagerServlet extends HttpServlet {
 
     }
 
+    /**
+     * funkcja obsługująca pobranie urlopu o podanym ID
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void loadVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie id urlopu z formularza
@@ -135,7 +162,12 @@ public class ManagerServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * funkcja odpowiadająca za wypisanie listy urlopów
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void listVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         List<VacationDB> vacationsList = dbUtil.getVacations();
@@ -151,7 +183,12 @@ public class ManagerServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * funkcja odpowiadająca za potwierdzenie poprawności hasła
+     * @param name login
+     * @param pass hasło
+     * @return czy potwierdzenie przzebiegło pomyślnie
+     */
     private boolean validate(String name, String pass) {
         boolean status = false;
 

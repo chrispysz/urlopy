@@ -13,12 +13,14 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.util.List;
 
+/**
+ * Klasa AdminServlet odpowiada za połączenie widoków Admina z pozostałymi klasami obsługująćymi bazę danych
+ */
 @WebServlet("/AdminServlet")
 public class AdminServlet extends HttpServlet {
 
     private DBUtilAdmin dbUtil;
     private final String db_url = "jdbc:postgresql://localhost:5432/urlopy?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=CET";
-
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -33,6 +35,13 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Funkcja odpowiadająca za obsługę zapytań Post
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -73,6 +82,13 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    /**
+     * funkcja odpowiadająca za obsługę zapytań Get
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -121,6 +137,12 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    /**
+     * Funkcja obsługująca akceptację edycji urlopów
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void acceptVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
@@ -137,6 +159,12 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    /**
+     * funkcja odpowiadająca za zatwierdzenie usunięcia urlopów
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void deleteVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
@@ -152,6 +180,12 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    /**
+     * funkcja odpowiadająca za aktualizowanie urlopu
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void updateVacation(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
@@ -171,7 +205,12 @@ public class AdminServlet extends HttpServlet {
         listVacations(request, response);
 
     }
-
+    /**
+     * funkcja obsługująca pobranie urlopu o podanym ID
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void loadVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie id urlopu z formularza
@@ -189,6 +228,12 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    /**
+     * funkcja odpowiadająca za dodawanie urlopów do BD
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void addVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         // odczytanie danych z formularza
@@ -208,6 +253,12 @@ public class AdminServlet extends HttpServlet {
 
     }
 
+    /**
+     * funkcja odpowiadająca za wypisanie listy urlopów
+     * @param request
+     * @param response
+     * @throws Exception
+     */
     private void listVacations(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         List<VacationDB> vacationsEditedList = dbUtil.getEditedVacations();
@@ -225,7 +276,12 @@ public class AdminServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * funkcja odpowiadająca za potwierdzenie poprawności hasła
+     * @param name login
+     * @param pass hasło
+     * @return czy potwierdzenie przzebiegło pomyślnie
+     */
     private boolean validate(String name, String pass) {
         boolean status = false;
 

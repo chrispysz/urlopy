@@ -3,6 +3,9 @@ package com.example.urlopy;
 import java.time.LocalDate;
 import java.sql.Date;
 
+/**
+ * klasa dla obiektów odpowiadających zawartości tabel vacations, removed_vacations i edited_vacations
+ */
 public class VacationDB implements Comparable<VacationDB> {
 
     private int vacationId;

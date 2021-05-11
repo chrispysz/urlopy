@@ -13,6 +13,9 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.util.List;
 
+/**
+ * Klasa RegisterServlet odpowiada za połączenie widoków rejestracji z pozostałymi klasami obsługująćymi bazę danych
+ */
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
 
@@ -34,7 +37,13 @@ public class RegisterServlet extends HttpServlet {
             throw new ServletException(e);
         }
     }
-
+    /**
+     * funkcja odpowiedzialna za obsługę zapytań Post
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
@@ -70,7 +79,12 @@ public class RegisterServlet extends HttpServlet {
 
     }
 
-
+    /**
+     * funkcja odpowiadająca za potwierdzenie poprawności hasła
+     * @param name login
+     * @param pass hasło
+     * @return czy potwierdzenie przzebiegło pomyślnie
+     */
     private boolean validate(String name, String pass) {
         boolean status = false;
 
